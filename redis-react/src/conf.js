@@ -1,1 +1,1 @@
-export const URL = 'http://redis:3000'
+export const URL = 'http://localhost:8081'
