@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - projet-net
+
+  backend:
+    build: ./redis-node
+    container_name: redis-node
+    ports:
+      - "8081:3000"
+    environment:
+      REDIS_URL: redis://redis:6379
+    networks:
+      - projet-net
+    depends_on:
+      - redis
+
+  frontend:
+    build: ./redis-react
+    container_name: redis-react
+    ports:
+      - "3000:80"
+    networks:
+      - projet-net
+    depends_on:
+      - backend
+
+networks:
+  projet-net:
