@@ -1,18 +1,20 @@
 #!/bin/bash
 
-echo "📦 Rebuild des images Docker..."
-docker build -t redis-node:local ./redis-node
-docker build -t redis-react:local ./redis-react
+echo "[1/5] Lancement de Minikube..."
+minikube start
 
-echo "📤 Chargement des images dans Minikube..."
-minikube image load redis-node:local
-minikube image load redis-react:local
+echo "[2/5] Activation de l'addon ingress..."
+minikube addons enable ingress
 
-echo "📄 Déploiement des fichiers YAML..."
+echo "[3/5] Configuration Docker locale..."
+eval $(minikube docker-env)
+
+echo "[4/5] Build des images Docker locales..."
+docker build -t redis-node ./redis-node
+docker build -t redis-react ./redis-react
+
+echo "[5/5] Déploiement Kubernetes..."
 kubectl apply -f k8s/
 
-echo "🔄 Redémarrage des déploiements..."
-kubectl rollout restart deployment redis-node
-kubectl rollout restart deployment redis-react
-
-echo "✅ Déploiement terminé. Attends quelques secondes puis lance ./check-status.sh"
+echo "➡️  N'oublie pas d'ajouter cette ligne à /etc/hosts :"
+echo "$(minikube ip) monapp.local"

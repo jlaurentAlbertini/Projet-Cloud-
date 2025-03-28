@@ -1,1 +1,1 @@
-export const URL = 'http://monapp.local'
+export const API_URL = "/api/";

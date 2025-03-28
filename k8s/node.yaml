@@ -13,23 +13,22 @@ spec:
         app: redis-node
     spec:
       containers:
-      - name: redis-node
-        image: redis-node:local
-        ports:
-        - containerPort: 3000
-        env:
-        - name: REDIS_URL
-          value: redis://redis:6379
+        - name: redis-node
+          image: redis-node:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REDIS_URL
+              value: redis://redis:6379
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: redis-node
 spec:
-  type: NodePort
-  ports:
-  - port: 3000
-    targetPort: 3000
-    nodePort: 31000
   selector:
     app: redis-node
+  ports:
+    - port: 3000
+      targetPort: 3000
+  type: ClusterIP
