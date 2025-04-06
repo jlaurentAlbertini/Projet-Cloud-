@@ -1,0 +1,28 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# React build
+build/
+
+# Docker
+*.tar
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Fichiers temporaires
+*~
+*.swp
+
+# Mac
+Icon?
