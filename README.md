@@ -6,7 +6,7 @@ Déployer une application complète (React + Node.js + Redis) dans un cluster **
 
 ---
 
-## 🗂️ Structure du projet
+## 🗂️Structure du projet
 
 ```
 Projet-Cloud-/
@@ -24,7 +24,7 @@ Projet-Cloud-/
 
 ---
 
-## ✅ Prérequis
+##  Prérequis
 
 - Docker
 - Minikube (`brew install minikube`)
@@ -37,7 +37,7 @@ Projet-Cloud-/
 
 ---
 
-## ⚙️ Configuration locale
+##  Configuration locale
 
 Ajoute cette ligne dans `/etc/hosts` pour que `monapp.local` fonctionne :
 ```bash
@@ -46,7 +46,7 @@ echo "$(minikube ip) monapp.local" | sudo tee -a /etc/hosts
 
 ---
 
-## 🚀 Déploiement avec Minikube
+##  Déploiement avec Minikube
 
 ### 1. Lance le script :
 ```bash
@@ -63,7 +63,7 @@ chmod +x deploy.sh
 
 ---
 
-## 🌐 Accès à l’application
+##  Accès à l’application
 
 - `http://monapp.local` → Frontend React
 - `http://monapp.local/item` → Backend Node.js
@@ -71,7 +71,7 @@ chmod +x deploy.sh
 
 ---
 
-## 🐞 Debug / Vérifications
+##  Debug / Vérifications
 
 ```bash
 kubectl get pods
