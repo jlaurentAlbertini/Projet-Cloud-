@@ -1,90 +1,84 @@
-# 🚀 Projet Cloud avec Kubernetes
+# Projet Cloud — Architecture full Docker/Kubernetes avec monitoring et autoscaling
 
-## Objectif
+## 🔧 Technologies utilisées
 
-Déployer une application complète (React + Node.js + Redis) dans un cluster **Minikube** en utilisant **Ingress** pour tout exposer via `http://monapp.local`.
-
----
-
-## 🗂️Structure du projet
-
-```
-Projet-Cloud-/
-├── redis-node/               # Backend Node.js
-├── redis-react/              # Frontend React
-├── k8s/                      # Fichiers Kubernetes (YAML)
-│   ├── redis.yaml
-│   ├── redis-node.yaml
-│   ├── redis-react.yaml
-│   └── ingress.yaml
-├── deploy.sh                 # Script de déploiement complet
-├── docker-compose.yaml       # (optionnel pour test local)
-└── README.md
-```
+- React (frontend)
+- Node.js (backend stateless)
+- Redis (base clé/valeur persistante)
+- Prometheus + Grafana (monitoring)
+- Kubernetes (Minikube)
+- Ingress NGINX (exposition)
+- Docker
 
 ---
 
-##  Prérequis
+## 🚀 Déploiement automatique
+
+### Pré-requis
 
 - Docker
-- Minikube (`brew install minikube`)
-- Node.js et Yarn installés
-- Cloner ce repo :
-  ```bash
-  git clone https://github.com/jlaurentAlbertini/Projet-Cloud-.git
-  cd Projet-Cloud-
+- Minikube installé (`brew install minikube`)
+- Ajouter à `/etc/hosts` :
+  ```
+  127.0.0.1 monapp.local
   ```
 
----
+### Lancer le déploiement
 
-##  Configuration locale
-
-Ajoute cette ligne dans `/etc/hosts` pour que `monapp.local` fonctionne :
-```bash
-echo "$(minikube ip) monapp.local" | sudo tee -a /etc/hosts
-```
-
----
-
-##  Déploiement avec Minikube
-
-### 1. Lance le script :
 ```bash
 chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### 2. Ce que fait le script :
-- Démarre Minikube
-- Active l’addon Ingress
-- Configure Docker local pour Minikube
-- Build les images backend et frontend
-- Applique les YAML Kubernetes dans `k8s/`
+---
+
+## 🌐 Accès
+
+- Frontend React : http://monapp.local
+- API Backend : http://monapp.local/items
+- Monitoring Prometheus : http://monapp.local/prometheus
+- Grafana : http://monapp.local/grafana (admin/admin)
 
 ---
 
-##  Accès à l’application
+## 📈 AutoScaling
 
-- `http://monapp.local` → Frontend React
-- `http://monapp.local/item` → Backend Node.js
-- `http://monapp.local/metrics` → Prometheus (Node.js)
+Le backend `redis-node` scale automatiquement selon la charge CPU grâce à un `HorizontalPodAutoscaler`.
 
----
-
-##  Debug / Vérifications
+Test de montée en charge avec :
 
 ```bash
-kubectl get pods
-kubectl get svc
-kubectl get ingress
-kubectl logs deployment/redis-node
-kubectl logs deployment/redis-react
+./stress-backend.sh
+```
+
+Surveiller avec :
+
+```bash
+watch kubectl get hpa
 ```
 
 ---
 
-## 🧹 Nettoyage
+## 🧱 Architecture
 
-```bash
-minikube delete
 ```
+Utilisateur ──▶ Ingress NGINX
+                    │
+     ┌──────────────┴──────────────┐
+     │                             │
+ Frontend (React)       API (Node.js /redis-node)
+                                  │
+                              Redis (ClusterIP)
+```
+
+---
+
+## ✅ Composants Kubernetes
+
+- `redis.yaml` : déploiement + service Redis avec volume persistant
+- `redis-node.yaml` : backend stateless
+- `redis-react.yaml` : frontend
+- `prometheus.yaml`, `grafana.yaml` : monitoring
+- `redis-node-hpa.yaml` : autoscaling HPA
+- `ingress.yaml` : exposition via domaine `monapp.local`
+
